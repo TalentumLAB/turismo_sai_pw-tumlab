@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+
+  pw-front:
+    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-frontend:0.11.4
+    container_name: turismo_sai_pw-front
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - pw-net
+    environment:
+      NEXT_PUBLIC_SAI_SERVICE_BACKEND: "http://localhost:8080/api/"
+      NEXT_PUBLIC_STORAGE: "https://auth.sanandresisla.travel/v1/api/storage/"
+      NEXT_PUBLIC_AUTH_SERVICE: "https://auth.sanandresisla.travel/v1/api/"
+  pw-back:
+    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-backend:0.7.4
+    container_name: turismo_sai_pw-back
+    restart: always
+    ports:
+      - 8080:8882
+    networks:
+      - pw-net
+    environment:
+      DB_CLIENT: "mysql"
+      DB_HOST: "sai-bds.cgk4z1nhx0wq.us-east-1.rds.amazonaws.com"
+      DB_PORT: "3306"
+      DB_USER: "Diego_dev"
+      DB_PASSWORD: "D1eg0_SAI"
+      DB_NAME: "turismo_sai"
+      COGNITO_REGION: "us-east-1"
+      COGNITO_USERPOOLID: "us-east-1_HCwxMTU2b"
+      COGNITO_IDENTITYPOOL: "us-east-1:13291b57-1708-46b2-8c28-8ff3494fe1b8"
+      COGNITO_CLIENTEID: "210r8fo7tg6hfjraca4e7smm3i"
+      COGNITO_DOMAIN: "blog-sanandresisla-travel.auth.us-east-1.amazoncognito.com"
+      AWS_ACCESS_KEY: "AKIA5AICEVQDOSXYZ45D"
+      AWS_SECRET_KEY: "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"
+      AWS_REGION: "us-east-1"
+      EMAIL_SES: "turismo.sai.travel@gmail.com"
+      JWK_alg: "RS256"
+      JWK_e: "AQAB"
+      JWK_kty: "RSA"
+      JWK_use: "sig"
+      JWK_AUTHORIZATION_kid: "Bp7EiOWUes61Tr2hFxoOu77woQs+KYkVtzItgGxfXN8="
+      JWK_AUTHORIZATION_n: "o2jHqaRXYrzT75cx1mO_uaMM5olnMcULKxhm6BRHZ0zwCyDpEl-TdaN8_3eUirMid5upnzRWmWrgPUwNSQCI5IQ0f-6W4WcwOPr8OCD-QStgNhDkdBrX8Bo_gvxo46OhPr88Z5yJ7ZcMr36hcMEjZFAog-TlbH0arFZh45cegNwSxc0Kg7eSDQRJ1089SZLuadLqMYhzTDytEGccqazjTKgRZrG3s9uSQcwwcOrOA5NfMVEtOopNPtk64DIcfqYN-yM7-5XwOSY8_lk6gGhWQBlepZWJ9ixrb-DO2dxTIlI56cZCvzcsxNTDirlZYKMyFgzKjR5-vAU7URC8Krz7CQ"
+networks:
+  pw-net:
+    driver: bridge

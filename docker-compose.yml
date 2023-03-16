@@ -1,0 +1,68 @@
+version: "3.8"
+services:
+  auth-backend:
+    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_auth:0.10.9
+    container_name: turismo-sai-auth-back
+    hostname: auth-back
+    env_file:
+      - ./auth.env
+    ports:
+      - "${PORT:-8881}:${PORT:-8881}"
+    volumes:
+      - ./auth-storage:/home/node/app/storage:rw
+    networks:
+      - turismo-sai-net
+    restart: unless-stopped
+  pw-backend:
+    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-backend:0.7.6
+    container_name: turismo_sai_pw-backend
+    hostname: pw-back
+    env_file:
+      - ./pw-backend.env
+    ports:
+      - "${PORT:-8882}:${PORT:-8882}"
+    networks:
+      - turismo-sai-net
+    restart: unless-stopped
+  pw-frontend:
+    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-frontend:0.12.2
+    container_name: turismo_sai_frontend
+    hostname: pw-frontend
+    env_file:
+      - ./pw-frontend.env
+    working_dir: /app
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    volumes:
+      - ./pw-frontend-storage:/app/storage:rw
+    # environment:
+    #   NODE_ENV: ${PW_FRONT_NODE_ENV:-development}
+    #   NEXT_PUBLIC_STORAGE: ${NEXT_PUBLIC_STORAGE:?err}
+    #   NEXT_PUBLIC_AUTH_SERVICE: ${NEXT_PUBLIC_AUTH_SERVICE:?err}
+    #   NEXT_PUBLIC_SAI_SERVICE_BACKEND: ${NEXT_PUBLIC_SAI_SERVICE_BACKEND:?err}
+    networks:
+      - turismo-sai-net
+    restart: unless-stopped
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    env_file:
+      - ./auth.env
+    # environment:
+    #   - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:?err}
+    #   - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:?err}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    volumes:
+      - 'minio_data:/data'
+    networks:
+      - turismo-sai-net
+networks:
+  turismo-sai-net:
+    driver: bridge
+
+volumes:
+  minio_data:
+    driver: local
