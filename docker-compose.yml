@@ -7,12 +7,14 @@ services:
     env_file:
       - ./auth.env
     ports:
-      - "${PORT:-8881}:${PORT:-8881}"
+      - 8881:8881
     volumes:
       - ./auth-storage:/home/node/app/storage:rw
     networks:
       - turismo-sai-net
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   pw-backend:
     image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-backend:0.7.6
     container_name: turismo_sai_pw-backend
@@ -20,10 +22,12 @@ services:
     env_file:
       - ./pw-backend.env
     ports:
-      - "${PORT:-8882}:${PORT:-8882}"
+      - 8882:8882
     networks:
       - turismo-sai-net
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   pw-frontend:
     image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-frontend:0.12.2
     container_name: turismo_sai_frontend
@@ -43,6 +47,8 @@ services:
     networks:
       - turismo-sai-net
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -59,6 +65,8 @@ services:
       - 'minio_data:/data'
     networks:
       - turismo-sai-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 networks:
   turismo-sai-net:
     driver: bridge
