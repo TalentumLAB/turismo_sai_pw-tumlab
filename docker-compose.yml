@@ -17,7 +17,7 @@ services:
       - "host.docker.internal:host-gateway"
   pw-backend:
     image: turismosai/sai-pw-back:7.6.0
-    container_name: turismo_sai_pw-backend
+    container_name: turismo_s ai_pw-backend
     hostname: pw-back
     env_file:
       - ./pw-backend.env
@@ -29,7 +29,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   pw-frontend:
-    image: turismosai/sai-pw-front:12.2.0
+    image: turismosai/sai-pw-front:12.4.0
     container_name: turismo_sai_frontend
     hostname: pw-frontend
     env_file:
