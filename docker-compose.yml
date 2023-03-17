@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   auth-backend:
-    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_auth:0.10.9
+    image: turismosai/sai-auth:10.9.0
     container_name: turismo-sai-auth-back
     hostname: auth-back
     env_file:
@@ -16,7 +16,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   pw-backend:
-    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-backend:0.7.6
+    image: turismosai/sai-pw-back:7.6.0
     container_name: turismo_sai_pw-backend
     hostname: pw-back
     env_file:
@@ -29,7 +29,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   pw-frontend:
-    image: gcr.io/co-corptalentum-gcp/sai/turismo_sai_pw-frontend:0.12.2
+    image: turismosai/sai-pw-front:12.2.0
     container_name: turismo_sai_frontend
     hostname: pw-frontend
     env_file:
